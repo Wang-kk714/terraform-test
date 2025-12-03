@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"k8s_master","Source":"../../modules/proxmox-vm","Dir":"../../modules/proxmox-vm"},{"Key":"k8s_worker_light","Source":"../../modules/proxmox-vm","Dir":"../../modules/proxmox-vm"},{"Key":"k8s_worker_main","Source":"../../modules/proxmox-vm","Dir":"../../modules/proxmox-vm"}]}
