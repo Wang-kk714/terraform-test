@@ -1,8 +1,8 @@
 resource "proxmox_vm_qemu" "ubuntu" {
   vmid        = 101
   name        = "master"
-  clone       = "ubuntu-noble"
-  target_node = "pve"
+  clone       = "Copy-ubuntu-noble"
+  target_node = "laptop1"
 
   scsihw      = "virtio-scsi-pci"
   
@@ -34,8 +34,8 @@ resource "proxmox_vm_qemu" "ubuntu" {
   # --- Disk 2: Data Disk ---
   disk {
     type    = "disk" 
-    storage = "local_ssd" 
-    size    = "100G"
+    storage = "local-lvm"
+    size    = "10G"
     slot    = "scsi1"
   }
   
