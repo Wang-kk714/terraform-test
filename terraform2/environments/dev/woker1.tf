@@ -19,7 +19,7 @@ module "woker1" {
   # 存储和网络
   boot_storage   = "local-lvm"
   data_storage   = "local_ssd"
-  ip_address     = "192.168.5.202"
+  ip_address     = "192.168.5.121"
   gateway        = "192.168.5.1"
 
   # 身份

@@ -1,8 +1,9 @@
-# Environment variables
+# variables.tf - contains declarations of variables used in main.tf
 
 variable "pm_api_token_id" {
   description = "Proxmox API token ID"
   type        = string
+  # sensitive   = true
 }
 
 variable "pm_api_token_secret" {
@@ -18,9 +19,9 @@ variable "base_template" {
 }
 
 variable "ssh_key_path" {
-  description = "Path to the SSH public key file (relative to this directory)"
+  description = "Path to the SSH public key file (relative to root directory)"
   type        = string
-  default     = "../../secret/proxmox_key.pub"
+  default     = "secret/proxmox_key.pub"
 }
 
 variable "default_user" {
@@ -28,4 +29,3 @@ variable "default_user" {
   type        = string
   default     = "yituadmin"
 }
-

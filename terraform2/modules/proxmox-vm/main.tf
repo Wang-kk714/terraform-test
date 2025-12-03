@@ -1,4 +1,4 @@
-# modules/proxmox-vm/main.tf
+# modules/proxmox-vm/main.tf - call modules, locals, and data sources to create all resources
 
 resource "proxmox_vm_qemu" "ubuntu" {
   vmid        = var.vmid

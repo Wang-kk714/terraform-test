@@ -1,0 +1,1 @@
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"dev","Source":"./environments/dev","Dir":"environments/dev"},{"Key":"dev.master","Source":"../../modules/proxmox-vm","Dir":"modules/proxmox-vm"},{"Key":"dev.woker1","Source":"../../modules/proxmox-vm","Dir":"modules/proxmox-vm"},{"Key":"dev.woker2","Source":"../../modules/proxmox-vm","Dir":"modules/proxmox-vm"}]}

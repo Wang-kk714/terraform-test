@@ -8,7 +8,8 @@ module "woker2" {
 
   vmid           = 303
   name           = "k8s-worker-light"
-  clone_template = var.base_template
+  target_node    = "laptop1"
+  clone_template = "Copy-ubuntu-noble"
 
   # 规格 (4 vCPU, 8G RAM, 120G Disk - 对应笔记本)
   cpu_cores      = 4
@@ -18,8 +19,8 @@ module "woker2" {
 
   # 存储和网络
   boot_storage   = "local-lvm"
-  data_storage   = "local_ssd"
-  ip_address     = "192.168.5.105"
+  data_storage   = "local-lvm"
+  ip_address     = "192.168.5.122"
   gateway        = "192.168.5.1"
 
   # 身份
