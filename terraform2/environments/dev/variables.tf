@@ -6,18 +6,6 @@ variable "pm_api_token_id" {
   sensitive   = true
 }
 
-variable "pm_api_url" {
-  description = "Proxmox API URL"
-  type        = string
-  default     = "https://192.168.5.110:8006/api2/json"
-}
-
-variable "pm_tls_insecure" {
-  description = "Allow insecure TLS connections to Proxmox API"
-  type        = bool
-  default     = true
-}
-
 variable "pm_api_token_secret" {
   description = "Proxmox API token secret"
   type        = string
