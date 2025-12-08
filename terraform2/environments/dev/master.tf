@@ -7,7 +7,7 @@ module "master" {
   source = "../../modules/proxmox-vm"
 
   vmid           = 301
-  name           = "k8s-master"
+  name           = "master"
   clone_template = var.base_template
 
   # 规格 (4 vCPU, 8G RAM, 80G Disk)
@@ -17,10 +17,10 @@ module "master" {
   data_disk_size = "80G"
 
   # 存储和网络
-  boot_storage   = "local-lvm"
-  data_storage   = "local_ssd"
+  boot_storage   = local.default_boot_storage
+  data_storage   = local.performance_storage
   ip_address     = "192.168.5.120"
-  gateway        = "192.168.5.1"
+  gateway        = local.default_gateway
 
   # 身份
   ci_user        = var.default_user

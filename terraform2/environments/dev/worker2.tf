@@ -7,7 +7,7 @@ module "woker2" {
   source = "../../modules/proxmox-vm"
 
   vmid           = 303
-  name           = "k8s-worker-light"
+  name           = "worker-light"
   target_node    = "laptop1"
   clone_template = "Copy-ubuntu-noble"
 
@@ -18,10 +18,10 @@ module "woker2" {
   data_disk_size = "12G" # 总计 120G
 
   # 存储和网络
-  boot_storage   = "local-lvm"
-  data_storage   = "local-lvm"
+  boot_storage   = local.default_boot_storage
+  data_storage   = local.default_data_storage
   ip_address     = "192.168.5.122"
-  gateway        = "192.168.5.1"
+  gateway        = local.default_gateway
 
   # 身份
   ci_user        = var.default_user

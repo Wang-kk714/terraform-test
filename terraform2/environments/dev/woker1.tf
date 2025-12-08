@@ -1,13 +1,10 @@
 # environments/dev/woker1.tf
 
-# ------------------------------------
-# k8s-worker-main
-# ------------------------------------
 module "woker1" {
   source = "../../modules/proxmox-vm"
 
   vmid           = 302
-  name           = "k8s-worker-main-01"
+  name           = "worker-main1"
   clone_template = var.base_template
 
   # 规格 (8 vCPU, 16G RAM, 200G Disk)
@@ -17,10 +14,10 @@ module "woker1" {
   data_disk_size = "200G" # 总计 200G
 
   # 存储和网络
-  boot_storage   = "local-lvm"
-  data_storage   = "local_ssd"
+  boot_storage   = local.default_boot_storage
+  data_storage   = local.performance_storage
   ip_address     = "192.168.5.121"
-  gateway        = "192.168.5.1"
+  gateway        = local.default_gateway
 
   # 身份
   ci_user        = var.default_user
