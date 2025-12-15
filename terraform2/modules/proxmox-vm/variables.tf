@@ -36,20 +36,20 @@ variable "boot_storage" {
   type        = string
 }
 
-variable "data_storage" {
-  description = "Storage pool for the data disk (e.g., local-ssd)"
-  type        = string
-}
+#variable "data_storage" {
+#  description = "Storage pool for the data disk (e.g., local-ssd)"
+#  type        = string
+#}
 
 variable "boot_disk_size" {
   description = "Size of the primary boot disk (e.g., 40G)"
   type        = string
 }
 
-variable "data_disk_size" {
-  description = "Size of the secondary data disk (e.g., 100G)"
-  type        = string
-}
+#variable "data_disk_size" {
+#  description = "Size of the secondary data disk (e.g., 100G)"
+#  type        = string
+#}
 
 variable "network_bridge" {
   description = "Network bridge to connect to (e.g., vmbr0)"

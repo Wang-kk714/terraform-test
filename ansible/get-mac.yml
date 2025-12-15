@@ -1,0 +1,105 @@
+---
+- name: 获取系统序列号
+  # hosts: 指定要执行playbook的目标主机组
+  #   - all: 表示所有在inventory中定义的主机
+  #   - 也可以指定特定组，如: k8s_master, k8s_workers
+  hosts: all
+  # gather_facts: 是否在playbook开始时自动收集目标主机的系统信息
+  #   - yes: 收集信息（如IP地址、操作系统等）存储到ansible_facts变量中
+  #   - no: 不收集，可以加快执行速度
+  gather_facts: yes
+  # become: 是否以提升的权限（root）执行任务
+  #   - yes: 需要sudo权限（因为dmidecode命令需要root权限）
+  #   - no: 以当前用户权限执行
+  become: yes
+  # become_method: 提升权限的方法
+  #   - sudo: 使用sudo命令（Linux系统默认）
+  #   - su: 使用su命令
+  become_method: sudo
+
+  tasks:
+    - name: 方法1 - 使用dmidecode获取系统序列号
+      # command: 执行shell命令模块
+      #   - dmidecode: 读取DMI (Desktop Management Interface) 信息的工具
+      #   - -s system-serial-number: 只输出系统序列号字段
+      command: dmidecode -s system-serial-number
+      # register: 将命令执行的结果保存到指定变量中
+      #   - sn_dmidecode: 变量名，包含了命令执行的完整结果信息
+      #     包含的属性：
+      #       - stdout: 命令的标准输出（我们需要的序列号）
+      #       - stderr: 命令的错误输出
+      #       - rc: 命令的返回码（0表示成功，非0表示失败）
+      #       - changed: 是否改变了系统状态
+      register: sn_dmidecode
+      # changed_when: 定义什么情况下任务被认为是"已更改"状态
+      #   - false: 这个任务永远不会标记为changed（因为是查询操作，不改变系统）
+      changed_when: false
+      # failed_when: 定义什么情况下任务被认为是"失败"状态
+      #   - false: 即使命令返回错误码，也不认为任务失败（配合ignore_errors使用）
+      failed_when: false                                        
+      # ignore_errors: 是否忽略错误继续执行后续任务
+      #   - yes: 即使这个任务失败，playbook也会继续执行
+      ignore_errors: yes
+
+    - name: 显示收集到的序列号信息
+      # debug: 用于输出调试信息的模块
+      debug:
+        msg:
+          # inventory_hostname: Ansible内置变量，表示inventory文件中定义的主机名
+          #   例如: master, worker-main1, worker-light
+          - "主机名: {{ inventory_hostname }}"
+          # ansible_host: Ansible内置变量，表示inventory文件中为当前主机设置的IP地址或主机名
+          # ansible_default_ipv4.address: 从gather_facts收集到的默认IPv4地址
+          # default过滤器: 如果ansible_host不存在，则使用ansible_default_ipv4.address
+          - "IP地址: {{ ansible_host | default(ansible_default_ipv4.address) }}"
+          # sn_dmidecode.stdout: 从之前register的变量中获取命令的标准输出（序列号）
+          # default过滤器: 如果sn_dmidecode.stdout为空或不存在，显示'未获取到'
+          - "系统序列号 (dmidecode): {{ sn_dmidecode.stdout | default('未获取到') }}"
+
+    - name: 保存序列号到变量（优先使用dmidecode结果）
+      # set_fact: 用于在playbook运行时设置变量的模块
+      set_fact:
+        # system_serial_number: 自定义变量名，存储最终的序列号
+        # 表达式说明：
+        #   - sn_dmidecode.rc == 0: 检查命令是否成功执行（返回码为0表示成功）
+        #   - 如果成功: 使用sn_dmidecode.stdout作为序列号
+        #   - 如果失败: 使用'N/A'作为默认值
+        system_serial_number: "{{ sn_dmidecode.stdout if sn_dmidecode.rc == 0 else 'N/A' }}"
+
+    - name: 汇总所有主机的序列号
+      # debug: 输出汇总信息
+      debug:
+        # msg: 要显示的消息
+        #   - inventory_hostname: 当前主机的名称
+        #   - system_serial_number: 上面set_fact设置的序列号变量
+        msg: "{{ inventory_hostname }} - 序列号: {{ system_serial_number }}"
+
+---
+- name: get-mac
+  hosts: k8s_cluster
+  gather_facts: yes
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: mac
+      command: cat /sys/class/net/eth0/address
+      register: mac
+      changed_when: false
+      failed_when: false
+      ignore_errors: yes
+    - name: debug
+      debug:
+        msg:
+          - "hostname: {{ inventory_hostname }}"
+          - "ip: {{ ansible_host | default(ansible_default_ipv4.address) }}"
+          - "MAC: {{ mac.stdout | default('null') }}"
+    - name: get_var
+      set_fact:
+        system_mac: "{{ mac.stdout if mac.rc == 0 else 'N/A' }}"
+    - name: summary
+      debug:
+        msg:
+          - "hostname: {{ inventory_hostname }}"
+          - "ip: {{ ansible_host | default(ansible_default_ipv4.address) }}"
+          - "MAC: {{ system_mac | default('null') }}"

@@ -13,12 +13,12 @@ module "master" {
   # 规格 (4 vCPU, 8G RAM, 80G Disk)
   cpu_cores      = 4
   ram_mb         = 8192
-  boot_disk_size = "3584M"
-  data_disk_size = "80G"
+  boot_disk_size = "80G"
+  #data_disk_size = "80G"
 
   # 存储和网络
   boot_storage   = local.default_boot_storage
-  data_storage   = local.performance_storage
+  #data_storage   = local.performance_storage
   ip_address     = "192.168.5.120"
   gateway        = local.default_gateway
 

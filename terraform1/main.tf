@@ -1,6 +1,6 @@
 resource "proxmox_vm_qemu" "ubuntu" {
-  vmid        = 101
-  name        = "master"
+  vmid        = 300
+  name        = "ansible"
   clone       = "Copy-ubuntu-noble"
   target_node = "laptop1"
 
@@ -12,9 +12,9 @@ resource "proxmox_vm_qemu" "ubuntu" {
 
   # CPU / Mem
   cpu {
-    cores = 2
+    cores = 4
   }
-  memory  = 2048
+  memory  = 8192
 
   # Network
   network {
@@ -27,16 +27,8 @@ resource "proxmox_vm_qemu" "ubuntu" {
   disk {
     type    = "disk" 
     storage = "local-lvm"
-    size    = "3584M"
+    size    = "100G"
     slot    = "scsi0" 
-  }
-
-  # --- Disk 2: Data Disk ---
-  disk {
-    type    = "disk" 
-    storage = "local-lvm"
-    size    = "10G"
-    slot    = "scsi1"
   }
   
   # --- Disk 3: Cloud-Init 驱动器 ---
@@ -47,7 +39,7 @@ resource "proxmox_vm_qemu" "ubuntu" {
   }
 
   # Cloud-init static IP
-  ipconfig0 = "ip=192.168.5.112/24,gw=192.168.5.1"
+  ipconfig0 = "ip=192.168.5.125/24,gw=192.168.5.1"
 
   # Cloud-init user and keys
   ciuser      = "yituadmin"

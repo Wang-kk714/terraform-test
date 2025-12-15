@@ -29,12 +29,12 @@ resource "proxmox_vm_qemu" "ubuntu" {
   }
 
   # --- Disk 2: Data Disk (High-Performance SSD) ---
-  disk {
-    type    = "disk"
-    storage = var.data_storage
-    size    = var.data_disk_size
-    slot    = "scsi1"
-  }
+  #disk {
+  #  type    = "disk"
+  #  storage = var.data_storage
+  #  size    = var.data_disk_size
+  #  slot    = "scsi1"
+  #}
 
   # --- Disk 3: Cloud-Init Driver ---
   disk {
