@@ -14,7 +14,7 @@ resource "proxmox_vm_qemu" "ubuntu" {
   cpu {
     cores = 4
   }
-  memory  = 8192
+  memory  = 4096
 
   # Network
   network {
